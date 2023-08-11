@@ -1,0 +1,141 @@
+include:
+  - project: 'hitss_ia/plataforma-hitss/devops/template-ci-cd-gitlab'
+    file: '.template-gitlab-ci.yml'
+    ref: $TEMPLATE_BRANCH_REF
+
+stages:
+  - go_test
+  - docker_build_image
+  - deploy_aks
+
+
+.go-cache:
+  variables:
+    GOPATH: $CI_PROJECT_DIR/.go
+  before_script:
+    - mkdir -p .go
+  cache:
+    key:
+      files:
+        - go.mod
+        - go.sum
+    paths:
+      - .go/pkg/mod/
+
+
+#TESTES
+0_go_test:
+  stage: go_test
+  image: golang:1.20.2-alpine3.17
+  tags:
+    - docker
+    - test
+  extends: .go-cache
+  script:
+    - go test ./... -v -short -cover
+
+
+#BUILD
+0_docker_image_build_dev:
+  stage: docker_build_image
+  image: acragentesvirtuaisdev.azurecr.io/hitss/azcli:1.0.0
+  environment: develop
+  extends:
+    - .build-job-template
+  dependencies: 
+    - 0_go_test
+  tags:
+    - azure
+    - docker
+    - build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $BRANCH_DEV
+      when: always
+    - when: never
+
+1_docker_image_build_homolog:
+  stage: docker_build_image
+  image: acragentesvirtuaishom.azurecr.io/hitss/azcli:1.0.0
+  environment: homolog
+  extends:
+    - .build-job-template
+  dependencies: 
+    - 0_go_test
+  tags:
+    - azure
+    - docker
+    - build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $BRANCH_HML
+      when: always
+    - when: never
+
+2_docker_image_build_prd:
+  stage: docker_build_image
+  image: acragentesvirtuaisprod.azurecr.io/hitss/azcli:1.0.0
+  environment: prod
+  extends:
+    - .build-job-template
+  dependencies: 
+    - 0_go_test
+  tags:
+    - azure
+    - docker
+    - build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $BRANCH_PRD
+      when: always
+    - when: never
+
+
+#DEPLOY
+deploy_aks_dev:
+  image: acragentesvirtuaisdev.azurecr.io/hitss/azcli:1.0.0
+  stage: deploy_aks
+  environment: develop
+  extends:
+    - .deploy-job-template
+  dependencies:
+    - 0_docker_image_build_dev
+  tags:
+    - deploy
+    - azure
+    - dev
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $BRANCH_DEV
+      when: always
+    - when: never
+
+deploy_aks_homolog:
+  image: acragentesvirtuaishom.azurecr.io/hitss/azcli:1.0.0
+  stage: deploy_aks
+  environment: homolog
+  extends:
+    - .deploy-job-template
+  dependencies:
+    - 1_docker_image_build_homolog
+  tags:
+    - deploy
+    - azure
+    - hom
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $BRANCH_HML
+      when: always
+    - when: never
+
+deploy_aks_prod:
+  image: acragentesvirtuaisprod.azurecr.io/hitss/azcli:1.0.0
+  stage: deploy_aks
+  environment: prod
+  extends:
+    - .deploy-job-template
+  dependencies:
+    - 2_docker_image_build_prd
+  tags:
+    - deploy
+    - azure
+    - prod
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $BRANCH_PRD
+      when: manual
+    - when: never

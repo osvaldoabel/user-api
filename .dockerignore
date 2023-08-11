@@ -1,0 +1,16 @@
+.git
+.dockerignore
+.gitignore
+!cmd/product/main.go
+docker-compose.yml
+main
+LICENSE
+README.md
+.DS_Store
+.thumbs.db
+.idea
+.vscode
+main
+*.exe
+
+tmp_data

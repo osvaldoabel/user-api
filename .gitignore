@@ -1,0 +1,11 @@
+.DS_Store
+.thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+main
+*.exe
+
+tmp_data
+example
