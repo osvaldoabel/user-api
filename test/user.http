@@ -1,38 +1,51 @@
+### token 
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTIxNDIyNzcsInN1YiI6ImJjNTkwMzg1LTFjOTgtNDNkNy1iN2FmLTY3OWI1OGUzNzc5YSJ9.KsIgPOxQqFpCASgxzGGp1t9OhcV6d8gSNOUaOyrnVR8
+
 ### create new User
 POST http://localhost:8800/users HTTP/1.1
 Content-Type: application/json
 
 {
     "name": "User example",
-    "email": "example@test.com",
-    "password": "123456"
+    "age": 40,
+    "email": "abel44@test.com",
+    "password": "123456",
+    "status": "active",
+    "address":  "Rua teste, 123"
 }
 
+### update user 
+PUT http://localhost:8800/users/4d4edebc-ed56-4fa7-bb14-df0f9204a16a HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "id": "4d4edebc-ed56-4fa7-bb14-df0f9204a16a",
+    "name": "user ",
+    "age": 37,
+    "address": "Rua teste, 123 ate 9"
+}
+
+
+### Delete User
+DELETE http://localhost:8800/users/793bdb75-63eb-4d1e-811b-aa0f7a156955 HTTP/1.1
+Content-Type: application/json
+
+####################### UNAUTHENTICATED REQUESTS #######################
 ### generate new token 
 POST http://localhost:8800/users/generate_token HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "example@test.com",
+    "email": "abel23@test.com",
     "password": "123456"
 }
 
-### update user 
-PUT http://localhost:8800/users/1 HTTP/1.1
+### list users 
+GET http://localhost:8800/users?page=4&limit=2 HTTP/1.1
+Content-Type: application/jsonAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTIwNTM1NDgsInN1YiI6ImJjNTkwMzg1LTFjOTgtNDNkNy1iN2FmLTY3OWI1OGUzNzc5YSJ9.oJhTOIGNqYZ0Wb4rwrviVlKOjoesvqg0OtETn3y0Nsg
+
+### Get User 
+GET http://localhost:8800/users/4d4edebc-ed56-4fa7-bb14-df0f9204a16a HTTP/1.1
 Content-Type: application/json
-
-{
-    "name": "User example",
-    "email": "example@test.com",
-    "password": "123456"
-}
-
-###
-GET http://localhost:8800/users HTTP/1.1
-Content-Type: application/json
-
-{
-    "name": "User example",
-    "email": "example@test.com",
-    "password": "123456"
-}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2OTIwNTM1NDgsInN1YiI6ImJjNTkwMzg1LTFjOTgtNDNkNy1iN2FmLTY3OWI1OGUzNzc5YSJ9.oJhTOIGNqYZ0Wb4rwrviVlKOjoesvqg0OtETn3y0Nsg

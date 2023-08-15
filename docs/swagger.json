@@ -33,7 +33,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "List users",
                 "parameters": [
@@ -56,20 +56,20 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/entity.User"
+                                "$ref": "#/definitions/dto.ListUsers"
                             }
                         }
                     },
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     }
                 }
@@ -83,7 +83,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Create user",
                 "parameters": [
@@ -104,7 +104,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     }
                 }
@@ -120,7 +120,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Auth"
                 ],
                 "summary": "Get a user JWT",
                 "parameters": [
@@ -144,13 +144,13 @@
                     "404": {
                         "description": "Not Found",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     }
                 }
@@ -158,11 +158,6 @@
         },
         "/users/{id}": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get a user",
                 "consumes": [
                     "application/json"
@@ -171,7 +166,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Get a user",
                 "parameters": [
@@ -197,7 +192,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     }
                 }
@@ -216,7 +211,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Update a user",
                 "parameters": [
@@ -248,7 +243,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     }
                 }
@@ -267,7 +262,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "Users"
                 ],
                 "summary": "Delete a user",
                 "parameters": [
@@ -285,12 +280,15 @@
                         "description": "OK"
                     },
                     "404": {
-                        "description": "Not Found"
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AppError"
+                        }
                     },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
-                            "$ref": "#/definitions/handlers.Error"
+                            "$ref": "#/definitions/handlers.AppError"
                         }
                     }
                 }
@@ -301,6 +299,12 @@
         "dto.CreateUserInput": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "integer"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -308,6 +312,9 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }
@@ -331,9 +338,18 @@
                 }
             }
         },
+        "dto.ListUsers": {
+            "type": "object"
+        },
         "dto.UpdateUserInput": {
             "type": "object",
             "properties": {
+                "address": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "integer"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -341,6 +357,9 @@
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 }
             }
@@ -374,7 +393,7 @@
                 }
             }
         },
-        "handlers.Error": {
+        "handlers.AppError": {
             "type": "object",
             "properties": {
                 "message": {

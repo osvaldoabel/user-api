@@ -13,6 +13,10 @@ const (
 	DEFAULT_PAGE     = 0
 )
 
+type AppError struct {
+	Message string `json:"message"`
+}
+
 func JsonResponse(w http.ResponseWriter, httpStatus int, data interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(httpStatus)
@@ -20,10 +24,10 @@ func JsonResponse(w http.ResponseWriter, httpStatus int, data interface{}) {
 }
 
 func GetPaginationInfo(r *http.Request) entity.Pagination {
-	offset := r.URL.Query().Get("page")
+	page := r.URL.Query().Get("page")
 	limit := r.URL.Query().Get("limit")
 
-	offsetInt, err := strconv.Atoi(offset)
+	offsetInt, err := strconv.Atoi(page)
 	if err != nil {
 		offsetInt = DEFAULT_PAGE
 	}
@@ -33,13 +37,9 @@ func GetPaginationInfo(r *http.Request) entity.Pagination {
 		limitInt = DEFAULT_PER_PAGE
 	}
 
-	// debug.DUMP(entity.Pagination{
-	// 	Limit:  limitInt,
-	// 	Offset: offsetInt,
-	// })
-
+	offset := (offsetInt - 1) * limitInt
 	return entity.Pagination{
-		Limit:  limitInt,
-		Offset: offsetInt,
+		Limit: limitInt,
+		Page:  offset,
 	}
 }

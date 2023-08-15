@@ -6,7 +6,8 @@ import (
 
 type ReaderRepository interface {
 	// GetAll resturns a list of Users
-	FindAll(params entity.Pagination) ([]entity.User, error)
+	// FindAll(params entity.Pagination) ([]entity.User, error)
+	FindAll(params entity.Pagination) (*entity.Pagination, error)
 
 	FindByEmail(email entity.Email) (entity.User, error)
 

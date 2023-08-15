@@ -4,11 +4,16 @@ import (
 	"fmt"
 
 	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlite"
 
 	"github.com/joho/godotenv"
 	"github.com/osvaldoabel/user-api/configs"
 	"github.com/osvaldoabel/user-api/internal/entity"
 	"gorm.io/gorm"
+)
+
+const (
+	IN_MEMORY_DSN = "file::memory:"
 )
 
 type DBConfig struct {
@@ -46,6 +51,31 @@ func FakeDB() *Database {
 
 func newDb() *Database {
 	return &Database{}
+}
+
+func NewInmemoryDB() *gorm.DB {
+	db, err := gorm.Open(sqlite.Open(IN_MEMORY_DSN), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	return db
+}
+
+func NewEmptyDB() *Database {
+	return &Database{
+		DB: NewInmemoryDB(),
+	}
+}
+
+func NewDbTest() *Database {
+	db := NewInmemoryDB()
+
+	if err := db.Migrator().HasTable(&entity.User{}); !err {
+		db.AutoMigrate(&entity.User{})
+	}
+
+	return &Database{DB: db}
 }
 
 // InitDB

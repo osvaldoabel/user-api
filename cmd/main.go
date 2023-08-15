@@ -17,13 +17,14 @@ import (
 //	@license.name	MIT
 //	@license.url	http://osvaldoabel.dev
 
-//	@host						localhost:8800
-//	@BasePath					/
-//	@securityDefinitions.apikey	ApiKeyAuth
-//	@in							header
-//	@name						Authorization
+// @host						localhost:8800
+// @BasePath					/
+// @securityDefinitions.apikey	ApiKeyAuth
+// @in							header
+// @name						Authorization
 func main() {
 	config, _ := configs.LoadConfig(".")
+
 	ws := webServer.NewWebServer(*config)
 	ws.Start()
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/osvaldoabel/user-api/internal/container"
-	"github.com/osvaldoabel/user-api/internal/dto"
 	"github.com/osvaldoabel/user-api/internal/entity"
 	"github.com/osvaldoabel/user-api/internal/repository/user"
 )
@@ -29,18 +28,9 @@ func (us *userService) CreateUser(user entity.User, ctx context.Context) (entity
 }
 
 // UpdateUser
-func (us *userService) UpdateUser(dto dto.UpdateUserInput, ctx context.Context) (entity.User, error) {
-	user, err := us.UserRepo.FindByID(entity.ID(dto.ID))
-	if err != nil {
-		return entity.User{}, err
-	}
-
-	if dto.Name != "" {
-		user.Name = dto.Name
-	}
-
-	if dto.Password != "" {
-		dtoPass, err := entity.NewPassword(dto.Password)
+func (us *userService) UpdateUser(user entity.User, ctx context.Context) (entity.User, error) {
+	if user.Password != "" {
+		dtoPass, err := entity.NewPassword(user.Password.String())
 		if err != nil {
 			return entity.User{}, err
 		}
@@ -84,11 +74,11 @@ func (us *userService) FindUserByEmail(userEmail entity.Email, ctx context.Conte
 }
 
 // ListUsers
-func (us *userService) ListUsers(search entity.Pagination, ctx context.Context) ([]entity.User, error) {
-	users, err := us.UserRepo.FindAll(search)
+func (us *userService) ListUsers(pagination entity.Pagination, ctx context.Context) (*entity.Pagination, error) {
+	paginationData, err := us.UserRepo.FindAll(pagination)
 	if err != nil {
-		return []entity.User{}, err
+		return nil, err
 	}
 
-	return users, nil
+	return paginationData, nil
 }

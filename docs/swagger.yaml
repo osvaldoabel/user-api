@@ -2,11 +2,17 @@ basePath: /
 definitions:
   dto.CreateUserInput:
     properties:
+      address:
+        type: string
+      age:
+        type: integer
       email:
         type: string
       name:
         type: string
       password:
+        type: string
+      status:
         type: string
     type: object
   dto.GetJWTInput:
@@ -21,13 +27,21 @@ definitions:
       access_token:
         type: string
     type: object
+  dto.ListUsers:
+    type: object
   dto.UpdateUserInput:
     properties:
+      address:
+        type: string
+      age:
+        type: integer
       id:
         type: string
       name:
         type: string
       password:
+        type: string
+      status:
         type: string
     type: object
   entity.User:
@@ -49,7 +63,7 @@ definitions:
       updatedAt:
         type: string
     type: object
-  handlers.Error:
+  handlers.AppError:
     properties:
       message:
         type: string
@@ -89,21 +103,21 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/entity.User'
+              $ref: '#/definitions/dto.ListUsers'
             type: array
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/handlers.AppError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/handlers.AppError'
       security:
       - ApiKeyAuth: []
       summary: List users
       tags:
-      - users
+      - Users
     post:
       consumes:
       - application/json
@@ -123,10 +137,10 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/handlers.AppError'
       summary: Create user
       tags:
-      - users
+      - Users
   /users/{id}:
     delete:
       consumes:
@@ -146,15 +160,17 @@ paths:
           description: OK
         "404":
           description: Not Found
+          schema:
+            $ref: '#/definitions/handlers.AppError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/handlers.AppError'
       security:
       - ApiKeyAuth: []
       summary: Delete a user
       tags:
-      - users
+      - Users
     get:
       consumes:
       - application/json
@@ -178,12 +194,10 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Error'
-      security:
-      - ApiKeyAuth: []
+            $ref: '#/definitions/handlers.AppError'
       summary: Get a user
       tags:
-      - users
+      - Users
     put:
       consumes:
       - application/json
@@ -211,12 +225,12 @@ paths:
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/handlers.AppError'
       security:
       - ApiKeyAuth: []
       summary: Update a user
       tags:
-      - users
+      - Users
   /users/generate_token:
     post:
       consumes:
@@ -239,14 +253,14 @@ paths:
         "404":
           description: Not Found
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/handlers.AppError'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/handlers.Error'
+            $ref: '#/definitions/handlers.AppError'
       summary: Get a user JWT
       tags:
-      - users
+      - Auth
 securityDefinitions:
   ApiKeyAuth:
     in: header

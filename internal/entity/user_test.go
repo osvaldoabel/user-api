@@ -7,16 +7,18 @@ import (
 )
 
 func TestNewUser(t *testing.T) {
-	user, err := NewUser("user 01", "email@example.com", "123456")
+	userDTO := CreateSampleUser()
+	user, err := NewUserEntity(userDTO)
 	assert.Nil(t, err)
 	assert.NotNil(t, user)
 	assert.NotEmpty(t, user.ID)
 	assert.Equal(t, "user 01", user.Name)
-	assert.Equal(t, "email@example.com", user.Email)
+	assert.Equal(t, "email@example.com", user.Email.String())
 }
 
 func TestUser_ValidatePassword(t *testing.T) {
-	user, err := NewUser("user 01", "email@example.com", "123456")
+	userDTO := CreateSampleUser()
+	user, err := NewUserEntity(userDTO)
 	assert.Nil(t, err)
 	assert.NotEmpty(t, user.Password)
 	assert.True(t, user.ValidatePassword("123456"))
@@ -25,7 +27,8 @@ func TestUser_ValidatePassword(t *testing.T) {
 }
 
 func TestUser_ValidatePasswordWithUnauthorizedPassword(t *testing.T) {
-	user, err := NewUser("user 01", "email@example.com", "123")
+	userDTO := CreateSampleUser()
+	user, err := NewUserEntity(userDTO)
 	assert.Nil(t, err)
 
 	assert.False(t, user.ValidatePassword("123"))

@@ -1,4 +1,7 @@
 
-
-- criar Application Error 
-- API Response
+- fazer casting de errors do service para o handler e retornar as infos corretamente 
+- gerenciar tokens 
+  - criar novos tokens 
+  - validar tokens 
+  - refresh tokens 
+  - criar um handler so para gerenciar a parte de auth

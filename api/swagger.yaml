@@ -1,0 +1,21 @@
+basePath: /
+host: localhost:8800
+info:
+  contact:
+    email: osvalldo.abel@gmail.com
+    name: Osvaldo Abel
+    url: osvaldoabel.dev
+  description: User API with auhtentication
+  license:
+    name: MIT
+    url: http://osvaldoabel.dev
+  termsOfService: http://swagger.io/terms/
+  title: User API Docs
+  version: "1.0"
+paths: {}
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

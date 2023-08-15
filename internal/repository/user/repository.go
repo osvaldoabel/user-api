@@ -20,20 +20,34 @@ func NewUserDBRepository(db *gorm.DB) UserDBRepository {
 }
 
 // FindAll
-func (ur *userDBRepository) FindAll(params entity.Pagination) ([]entity.User, error) {
+func (ur *userDBRepository) FindAll(params entity.Pagination) (*entity.Pagination, error) {
 	var users []entity.User
 
+	// Get total rows
+	var totalRows int64
+	ur.Db.Model(entity.User{}).Count(&totalRows)
+
+	// Get total pages
+	totalPages := totalRows / int64(params.Limit)
+
 	result := ur.Db.Limit(params.Limit).
-		Offset(params.Offset).
+		Offset(params.Page).
 		Order(DEFAULT_ORDER_BY).
 		Find(&users)
 
 	if result.Error != nil {
 		// log here
-		return []entity.User{}, result.Error
+		return nil, result.Error
 	}
 
-	return users, nil
+	_pagination := entity.Pagination{
+		Limit:      params.Limit,
+		Page:       params.Page,
+		TotalRows:  totalRows,
+		TotalPages: int(totalPages),
+		Rows:       users,
+	}
+	return &_pagination, nil
 }
 
 // FindByID
@@ -74,7 +88,8 @@ func (ur *userDBRepository) Update(user entity.User) (entity.User, error) {
 		// log here
 		return entity.User{}, err
 	}
-	return entity.User{}, nil
+
+	return user, nil
 }
 
 // Delete
