@@ -15,7 +15,7 @@ In this project we create a *REST API* using [hexagonal archiecture or ports & a
 
 ### Requirements
 
-You just need to have [Git ](https://docs.docker.com/install) and [Docker ](https://docs.docker.com/install) installed and running on your machine.
+You need to have [Git ](https://docs.docker.com/install) and [Docker ](https://docs.docker.com/install) installed and running on your machine.
 
 #### Clone Project
 
@@ -114,17 +114,11 @@ curl -X DELETE http://localhost:8888/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec
 - Authentication / Authorization
 - More [Advanced Logging system]()
 
-**NOTE:** It Would be interesting if we persisted our logs into Elasticsearch. 
- **pros**:  
- . You can serve as many microservice as you'll need
- . You'll have an Asynchronous system (very good most of the time. )
- . etc.  
- **Cons**: 
- . Increases project complexity
+**NOTE:** It Would be interesting if we persisted we implement a rate limit.  
 
  **NOTE 2**
 This is just a hypothetical scenario. 
-If your project will not grow to this magnitude, you don't need to implement it this way.
+If your project doesn't grow to this magnitude, you don't need to implement it this way.
 
-Developed by [Osvaldo Abel](https://gitlab.com/osvaldoabel)
+Developed by [Osvaldo Abel](osvaldoabel.dev)
 
