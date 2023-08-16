@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"errors"
 	"time"
 
 	"github.com/osvaldoabel/user-api/internal/dto"
@@ -37,7 +38,7 @@ type User struct {
 	ID       common.ID `valid:"uuid" gorm:"type:uuid;primary_key" json:"id"`
 	Name     string    `json:"name"`
 	Age      int       ` json:"age"`
-	Email    Email     ` json:"email"`
+	Email    Email     ` gorm:"index:idx_email,unique" json:"email" `
 	Password Password  ` json:"-"`
 	Address  string    `json:"address"`
 	Status   int       ` json:"status"`
@@ -58,28 +59,20 @@ func NewUserEntity(dto dto.CreateUserInput) (*User, error) {
 	}
 
 	user.ID = common.NewID()
-	user.Email = Email(dto.Email)
+	if dto.Email != "" {
+		email := Email(dto.Email)
+		if !email.Validate() {
+			return nil, errors.New("invalid email")
+
+		}
+		user.Email = email
+	}
 	user.Name = dto.Name
 	user.Age = dto.Age
 	user.Address = dto.Address
 	user.Status = int(STATUS_ACTIVE)
 
 	return &user, nil
-
-	// hash, err := bcrypt.GenerateFromPassword([]byte(dto.Password), bcrypt.DefaultCost)
-	// if err != nil {
-	// 	return nil, err
-	// }
-
-	// user := &User{
-	// 	ID:       common.NewID(),
-	// 	Name:     dto.Name,
-	// 	Email:    Email(dto.Email),
-	// 	Age:      dto.Age,
-	// 	Address:  dto.Address,
-	// 	Status:   int(STATUS_ACTIVE),
-	// 	Password: Password(hash),
-	// }
 
 }
 

@@ -1,7 +1,15 @@
 package entity
 
+import "regexp"
+
 type ID string
 type Email string
+
+// Validate is a function to validate email
+func (e *Email) Validate() bool {
+	pattern := regexp.MustCompile(`^(\w|\.)+@(\w)+(.(\w)+){1,2}$`)
+	return pattern.MatchString(e.String())
+}
 
 type ParamOption struct {
 	OrderByField string // ex: order by 'name'

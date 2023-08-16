@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  vm.app:
+    build: 
+      context: "./build"
+      dockerfile: "Dockerfile.dev"
+      
+    container_name: vm.app
+    ports:
+      - "8800:8800"
+    volumes:
+      - .:/app
+    depends_on: 
+      - vm.db
+    environment: 
+      - DB_HOST=vm.db
+      - DB_PORT=5432
+      - DB_NAME=vm_db
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_SCHEMA=public
+      - DB_SSL=false
+
+  vm.db:
+    image: postgres:9.6
+    container_name: vm.db
+    ports:
+      - "5433:5432"
+    environment:
+    - "POSTGRES_PASSWORD: postgres"
+    - "POSTGRES_HOST_AUTH_METHOD=trust"
+    - "POSTGRES_DB=vm_db"
+    volumes:
+      # - ./data:/var/lib/postgresql/data
+      - ./docs/vm_db.sql:/docker-entrypoint-initdb.d/vm_db.sql
+      

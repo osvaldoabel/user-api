@@ -1,6 +1,7 @@
 package database
 
 import (
+	"errors"
 	"fmt"
 
 	"gorm.io/driver/postgres"
@@ -9,6 +10,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/osvaldoabel/user-api/configs"
 	"github.com/osvaldoabel/user-api/internal/entity"
+	"github.com/osvaldoabel/user-api/pkg/common"
 	"gorm.io/gorm"
 )
 
@@ -107,8 +109,28 @@ func (d *Database) Connect() (*gorm.DB, error) {
 		return nil, err
 	}
 
+	pass, _ := entity.NewPassword("123456")
 	if d.AutoMigrateDb {
-		db.AutoMigrate(&entity.User{})
+		userSeed := entity.User{
+			ID:       common.NewID(),
+			Name:     "User 01",
+			Email:    "email@example.com",
+			Password: pass,
+			Address:  "Address 01",
+			Age:      18,
+		}
+
+		if err = db.AutoMigrate(&entity.User{}); err == nil && db.Migrator().HasTable(&entity.User{}) {
+			if err := db.First(&entity.User{}).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+				// it runs only on application start up
+				db.AutoMigrate(&entity.User{})
+				result := db.Create(&userSeed)
+				if err := result.Error; err != nil {
+					return nil, err
+				}
+			}
+		}
+
 	}
 
 	return db, nil
