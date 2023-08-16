@@ -4,4 +4,3 @@
   - criar novos tokens 
   - validar tokens 
   - refresh tokens 
-  - criar um handler so para gerenciar a parte de auth
