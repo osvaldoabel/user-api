@@ -9,13 +9,23 @@
 
 
 # Introduction
- In this repository, we have everything we need to run this **User Api** project using [docker containers](http://docker.com). Below you can see a basic guide to learn how to run it in your local environment.
+ In this repository, we have everything we need to run this **User Api** project using [docker containers](http://docker.com). Below you can see a basic guide to learning how to run it in your local environment.
 
-In this project we create a *REST API* using [hexagonal archiecture or ports & adpters architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) resulting in a robust and flexible project. So it's  pretty simple to add new features, new Entities, etc. Including if we need to add a **console adapter**, the **application layers** will keep intact.
+In this project, we create a *REST API  (user-api)* using [hexagonal architecture or ports & adapters architecture](https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)) resulting in a robust and flexible project. So it's  pretty simple to add new features, new Entities, etc. Including if we need to add a **console adapter**, the **application layers** will keep intact.
+
+
+## Swagger docs
+
+![image](https://github.com/osvaldoabel/user-api/assets/3024922/69f29850-7898-4cbc-a453-408400f59404)
+
 
 ### Requirements
 
 You need to have [Git ](https://docs.docker.com/install) and [Docker ](https://docs.docker.com/install) installed and running on your machine.
+
+
+
+
 
 #### Clone Project
 
@@ -38,12 +48,13 @@ $ docker-compose ps
 ```
 
 ```bash
-  # get into vma.app to do anything you might need
+  # get into vm.app to do anything you might need
 $ docker exec -it vm.app bash
 ```
 
 
 ## API Endpoints 
+
 - #### CREATE User
 
 ```
@@ -101,13 +112,8 @@ curl -X GET http://localhost:8888/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec4c 
 }'
 ```
 
-- #### DELETE User
 
-```
-#/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec4c 
 
-curl -X DELETE http://localhost:8888/v1/users/fa9f88f4-4fe8-46d8-afb3-85886c50ec4c -H 'Content-Type: application/json'
-```
 
 # To DO
 - Caching (With [redis](https://redis.io/) )
