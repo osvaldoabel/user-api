@@ -88,7 +88,7 @@ Authorization: Bearer {{token}}
 - #### LIST users (Paginated)
 
 ```
-# /v1/users?per_page=10
+# /users?page=4&limit=2
 
 GET http://0.0.0.0:8800/users?page=4&limit=2 HTTP/1.1
 Content-Type: application/json 
